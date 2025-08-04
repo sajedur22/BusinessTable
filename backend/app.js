@@ -10,7 +10,16 @@ const app = express();
 
 
 // Security Middleware
-app.use(cors());
+const corsOptions = {
+    origin: [
+        "http://localhost:5173",    // local dev
+        //"https://yourfrontend.vercel.app" // production
+    ],
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(hpp());
 
