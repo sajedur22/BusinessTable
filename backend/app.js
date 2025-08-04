@@ -8,6 +8,7 @@ const router = require('./src/routes/api');
 const path = require('path');
 const app = express();
 
+
 // Security Middleware
 app.use(cors());
 app.use(helmet({ crossOriginResourcePolicy: false }));
@@ -59,6 +60,8 @@ mongoose.connect(uri, options)
 
 // API Routing
 app.use("/api/v1", router);
+
+
 
 // Export
 module.exports = app;
