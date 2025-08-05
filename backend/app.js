@@ -10,11 +10,20 @@ const app = express();
 
 
 // Security Middleware
-const corsOptions = {
-    origin: [
-        process.env.CLIENT_URL    // local dev
 
-    ],
+const CLIENT_URLS = [
+    process.env.DEV_CLIENT_URL,
+    process.env.PROD_CLIENT_URL,
+].filter(Boolean); // Removes empty/undefined URLs
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || CLIENT_URLS.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS: ' + origin));
+        }
+    },
     credentials: true,
 };
 
