@@ -12,8 +12,8 @@ const app = express();
 // Security Middleware
 const corsOptions = {
     origin: [
-        "http://localhost:5173",    // local dev
-        //"https://yourfrontend.vercel.app" // production
+        process.env.CLIENT_URL    // local dev
+
     ],
     credentials: true,
 };
