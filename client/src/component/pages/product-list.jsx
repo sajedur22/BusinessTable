@@ -7,31 +7,34 @@ const ProductList = () => {
     const [searchKey, setSearchKey] = useState("0");
     const [perPageKey, setPerPageKey] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const ALLProduct = useSelector((state) => state.product.ALLProduct);
     const Total = useSelector((state) => state.product.Total);
 
-    // Fetch on first load and whenever dependencies change
+    // Track window resize for mobile view
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Fetch on first load and when params change
     useEffect(() => {
         GetProductList(currentPage, perPageKey, searchKey);
     }, [currentPage, perPageKey, searchKey]);
 
-    // Total pages for pagination
     const pageCount = Math.ceil(Total / perPageKey) || 0;
 
-    // Pagination Handler
     const handlePageClick = (data) => {
-        setCurrentPage(data.selected + 1); // ReactPaginate starts at 0
+        setCurrentPage(data.selected + 1);
     };
 
-    // Handle Search
     const handleSearch = () => {
-        setCurrentPage(1); // reset to first page
-        if (searchKey.trim() === "") {
-            setSearchKey("0");
-        } else {
-            setSearchKey(searchKey);
-        }
+        setCurrentPage(1);
+        setSearchKey((prev) => (prev.trim() === "" ? "0" : prev));
     };
 
     return (
@@ -42,12 +45,12 @@ const ProductList = () => {
                         <div className="card">
                             <div className="card-body">
                                 <div className="container-fluid">
-                                    {/* Header Row */}
+                                    {/* Header */}
                                     <div className="row mb-3">
-                                        <div className="col-6">
+                                        <div className="col-md-6 col-12 mb-2">
                                             <h5>My Product List</h5>
                                         </div>
-                                        <div className="col-2">
+                                        <div className="col-md-2 col-6 mb-2">
                                             <select
                                                 className="form-control form-select-sm"
                                                 value={perPageKey}
@@ -63,11 +66,12 @@ const ProductList = () => {
                                                 ))}
                                             </select>
                                         </div>
-                                        <div className="col-4">
-                                            <div className="input-group mb-3">
+                                        {/*search*/}
+                                        <div className="col-md-4 col-12 mb-2">
+                                            <div className="d-flex flex-column flex-md-row">
                                                 <input
                                                     type="text"
-                                                    className="form-control form-control-sm"
+                                                    className="form-control form-control-sm mb-2 mb-md-0 me-md-2"
                                                     placeholder="Search.."
                                                     value={searchKey === "0" ? "" : searchKey}
                                                     onChange={(e) => setSearchKey(e.target.value)}
@@ -82,75 +86,107 @@ const ProductList = () => {
                                                 </button>
                                             </div>
                                         </div>
+
+
                                     </div>
 
-                                    {/* Table */}
+                                    {/* Product List */}
                                     <div className="row">
                                         <div className="col-12">
-                                            <div className="table-responsive data-table">
-                                                <table className="table">
-                                                    <thead className="sticky-top bg-white">
-                                                    <tr>
-                                                        <th>Product</th>
-                                                        <th>Price</th>
-                                                        <th className="text-center">Stock</th>
-                                                        <th className="text-center">Code</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {ALLProduct.length > 0 ? (
-                                                        ALLProduct.map((item, i) => (
-                                                            <tr key={item._id || i}>
-                                                                <td>
-                                                                    <div className="d-flex px-2 py-1">
-                                                                        <div>
-                                                                            <img
-                                                                                src={item.image}
-                                                                                alt={item.title}
-                                                                                className="avatar me-3"
-                                                                            />
+                                            {ALLProduct && ALLProduct.length > 0 ? (
+                                                isMobile ? (
+                                                    // Mobile view: card layout
+                                                    ALLProduct.map((item, i) => (
+                                                        <div className="card shadow-sm mb-3" key={item._id || i}>
+                                                            <div className="card-body d-flex align-items-start">
+                                                                {/* Image */}
+                                                                <img
+                                                                    src={item.image || "/default.png"}
+                                                                    alt={item.title}
+                                                                    onError={(e) => (e.target.src = "/default.png")}
+                                                                    style={{
+                                                                        width: "60px",
+                                                                        height: "60px",
+                                                                        objectFit: "cover",
+                                                                        borderRadius: "8px",
+                                                                        flexShrink: 0,
+                                                                    }}
+                                                                    className="me-3"
+                                                                />
+
+                                                                {/* Text Content */}
+                                                                <div style={{
+                                                                    overflowWrap: "break-word",
+                                                                    wordBreak: "break-word",
+                                                                    flex: "1 1 0"
+                                                                }}>
+                                                                    <h6 className="mb-1 fw-semibold text-truncate">{item.title}</h6>
+                                                                    <p className="mb-1 text-muted small">{item.category}</p>
+
+                                                                    <div className="small text-secondary">
+                                                                        <div><strong>Brand:</strong> {item.brand}</div>
+                                                                        <div><strong>Price:</strong> {item.price} Taka
                                                                         </div>
-                                                                        <div className="d-flex flex-column justify-content-center">
-                                                                            <h6 className="mb-0 text-xs">
-                                                                                {item.title}
-                                                                            </h6>
-                                                                            <p className="text-xs text-secondary mb-0">
-                                                                                {item.category}
-                                                                            </p>
+                                                                        <div><strong>Stock:</strong> {item.stock}</div>
+                                                                        <div><strong>Code:</strong> {item.product_code}
                                                                         </div>
                                                                     </div>
-                                                                </td>
-                                                                <td>
-                                                                    <p className="text-xs font-weight-bold mb-0">
-                                                                        {item.brand}
-                                                                    </p>
-                                                                    <p className="text-xs text-secondary mb-0">
-                                                                        {item.price} Taka
-                                                                    </p>
-                                                                </td>
-                                                                <td className="text-center">
-                                                                   <span className="badge bg-gradient-success">
-                                                                        {item.stock}
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                                                      </span>
-                                                                </td>
-                                                                <td className="text-center">
-                                                            <span className="text-secondary text-xs font-weight-bold">
-                                                               {item.product_code}
-                                                             </span>
-                                                                </td>
+                                                    ))
+                                                ) : (
+                                                    // Desktop view: table layout
+                                                    <div className="table-responsive data-table">
+                                                        <table className="table">
+                                                            <thead className="sticky-top bg-white">
+                                                            <tr>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th className="text-center">Stock</th>
+                                                                <th className="text-center">Code</th>
                                                             </tr>
-                                                        ))
-                                                    ) : (
-                                                        <tr>
-                                                            <td colSpan="4" className="text-center">
-                                                                No products found
-                                                            </td>
-                                                        </tr>
-                                                    )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                            </thead>
+                                                            <tbody>
+                                                            {ALLProduct.map((item, i) => (
+                                                                <tr key={item._id || i}>
+                                                                    <td>
+                                                                        <div className="d-flex px-2 py-1">
+                                                                            <div>
+                                                                                <img
+                                                                                    src={item.image}
+                                                                                    alt={item.title}
+                                                                                    className="avatar me-3"
+                                                                                    style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                                                                                    onError={(e) => (e.target.src = "/default.png")}
+                                                                                />
+                                                                            </div>
+                                                                            <div className="d-flex flex-column justify-content-center">
+                                                                                <h6 className="mb-0 text-xs">{item.title}</h6>
+                                                                                <p className="text-xs text-secondary mb-0">{item.category}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p className="text-xs font-weight-bold mb-0">{item.brand}</p>
+                                                                        <p className="text-xs text-secondary mb-0">{item.price} Taka</p>
+                                                                    </td>
+                                                                    <td className="text-center">
+                                                                        <span className="badge bg-gradient-success">{item.stock}</span>
+                                                                    </td>
+                                                                    <td className="text-center">
+                                                                        <span className="text-secondary text-xs font-weight-bold">{item.product_code}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                )
+                                            ) : (
+                                                <div className="text-center">No products found</div>
+                                            )}
                                         </div>
 
                                         {/* Pagination */}
@@ -175,6 +211,7 @@ const ProductList = () => {
                                                 activeClassName="active"
                                             />
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
