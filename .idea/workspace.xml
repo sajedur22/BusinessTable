@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e47b0e41-0fce-41c6-a1dd-e1256e603c48" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/client/src/assets/images/Loading Files.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/component/masterLayout/loader.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/component/pages/product-list.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/component/pages/product-list.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,9 +20,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JSX File" />
         <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>
@@ -51,6 +56,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\javascript\business-table\client\src\assets\images" />
       <recent name="D:\javascript\business-table\client\public" />
     </key>
   </component>
@@ -78,6 +84,8 @@
       <workItem from="1754378207686" duration="9477000" />
       <workItem from="1754391054365" duration="2124000" />
       <workItem from="1754514329866" duration="1464000" />
+      <workItem from="1754576620496" duration="34000" />
+      <workItem from="1754582376027" duration="2065000" />
     </task>
     <servers />
   </component>

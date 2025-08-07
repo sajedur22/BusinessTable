@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { GetProductList } from "../../routes/api.jsx";
 import { useSelector } from "react-redux";
+import LoaderSkeleton from "../masterLayout/loader.jsx";
 
 const ProductList = () => {
     const [searchKey, setSearchKey] = useState("0");
@@ -36,7 +37,9 @@ const ProductList = () => {
         setCurrentPage(1);
         setSearchKey((prev) => (prev.trim() === "" ? "0" : prev));
     };
-
+if(!ALLProduct || ALLProduct.length===0){
+    return <LoaderSkeleton/>
+}else {
     return (
         <Fragment>
             <div className="container my-5">
@@ -221,6 +224,8 @@ const ProductList = () => {
             </div>
         </Fragment>
     );
+}
+
 };
 
 export default ProductList;
